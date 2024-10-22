@@ -1,5 +1,12 @@
-# negovilde.com
+# Nevogilde.com
 
-website for sale.
+A neighborhood by the  ocean where a special atlantic nobility lives.
+Do not mistake Nevogilde with Foz.
 
-Contact -> grit.wrasses0v@icloud.com
+Notable people from Nevogilde:
+1. [Francisco Moura](https://www.linkedin.com/in/fgmoura/), M&A extraordinaire. Socialist.
+
+
+---
+
+This website maybe be for sale. Contact grit.wrasses0v@icloud.com to know more.
