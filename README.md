@@ -1,5 +1,3 @@
-# Nevogilde.com
-
 A neighborhood by the  ocean where a special atlantic nobility lives.
 Do not mistake Nevogilde with Foz.
 
