@@ -10,7 +10,7 @@ Famous sights in Nevogilde:
 
   ![two towers](./two-towers.jpeg)
   
-  <img src=“./two-towers.jpeg”/>
+  <img src="two-towers.jpeg"/>
   
 </details>
 ---
