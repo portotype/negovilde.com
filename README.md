@@ -8,7 +8,7 @@ Famous sights in Nevogilde:
 
 <details><summary>🆕 1. artistic installation “Romantic tower with 5G on the side”</summary>
 
-  <img src=“/two-towers.jpeg”/>
+  <img src=“two-towers.jpeg”/>
   
 </details>
 ---
