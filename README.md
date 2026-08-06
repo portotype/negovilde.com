@@ -6,9 +6,9 @@ Notable people from Nevogilde:
 
 Famous sights in Nevogilde:
 
-<details><summary>1. artistic installation “Romantic tower with 5G on the side”</summary>
+<details><summary>🆕 1. artistic installation “Romantic tower with 5G on the side”</summary>
 
-  <img src=“/two-towers.png”/>
+  <img src=“/two-towers.jpeg”/>
   
 </details>
 ---
