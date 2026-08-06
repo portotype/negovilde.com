@@ -5,16 +5,10 @@ Notable people from Nevogilde:
 1. [Francisco Moura](https://www.linkedin.com/in/fgmoura/).
 
 Famous sights in Nevogilde:
-
-  ![two towers](./two-towers.jpeg)
-  
-  <img src="./two-towers.jpeg"/>
   
 <details markdown=1><summary>🆕 1. artistic installation “Romantic tower with 5G on the side”</summary>
 
-  ![two towers](two-towers.jpeg)
-  
-  <img src="/two-towers.jpeg"/>
+  ![two towers](img/two-towers.jpg)
   
 </details>
 ---
