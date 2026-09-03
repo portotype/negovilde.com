@@ -242,12 +242,12 @@ polite.addEventListener('change',updateLanguage);
 const shareBtn=document.getElementById('share');
 const shareMsg=document.getElementById('shareMsg');
 
-async async function shareResult() {
+async function shareResult() {
   calculate();
 
   const points = document.getElementById('score').textContent.trim();
-  const classification = document.getElementById('classification').textContent.trim();
-  const description = document.getElementById('description').textContent.trim();
+  const classification = document.getElementById('tier').textContent.trim();
+  const description = document.getElementById('tierText').textContent.trim();
 
   const text = `${points} pontos: ${classification}
 - ${description}
