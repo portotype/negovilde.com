@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Betómetro</title>
+<style>
+:root{--g:#1f3d2e;--gc:#375c46;--c:#f2ede1;--ca:#ece4cf;--d:#a97d3c;--dl:#c9a15f;--r:#8c3b2e;--t:#24261f;--l:#cfc4a8;--s:#6b6552}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--c);color:var(--t);font:16px/1.45 Georgia,"Times New Roman",serif}
+header{background:var(--g);color:var(--c);text-align:center;padding:36px 16px 30px;border-bottom:5px solid var(--d)}
+h1{margin:0 0 5px;font-size:clamp(2.2rem,10vw,3.2rem);line-height:1.05}
+header p{margin:0;color:var(--dl);font-style:italic;font-size:.98rem}
+.scorebar{position:sticky;top:0;z-index:20;background:rgba(242,237,225,.97);border-bottom:1px solid var(--l);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.scoreinner{max-width:760px;margin:auto;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.score{font-size:1.8rem;font-weight:bold;color:var(--g);font-variant-numeric:tabular-nums;white-space:nowrap}
+.score small{font-size:.72rem;font-weight:normal;color:var(--s)}
+.status{font-size:.82rem;text-align:right;color:var(--s);line-height:1.2}
+.status strong{display:block;color:var(--g);font-size:.95rem}
+.wrap{max-width:760px;margin:auto;padding:24px 16px 60px}
+.intro,.note{background:var(--ca);border-left:4px solid var(--d);padding:12px 14px;margin-bottom:22px;color:#55503f;font-size:.92rem}
+.intro strong,.note strong{display:block;color:var(--g);margin-bottom:2px}
+.setting{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-8px 0 18px;padding:11px 13px;border:1px solid var(--l);border-radius:4px;background:#f7f2e7;color:var(--g);font-size:.94rem}
+.setting label{display:flex;align-items:center;gap:7px;cursor:pointer}
+.setting input{width:18px;height:18px;accent-color:var(--d)}
+.politebonus{display:none;color:var(--gc);font-size:.84rem;font-style:italic;white-space:nowrap}
+.setting.checked .politebonus{display:inline}
+fieldset{border:0;border-top:1px solid var(--l);margin:0;padding:20px 0}
+legend{width:100%;padding:0 0 8px;color:var(--g);font-size:1.12rem;font-weight:bold}
+.q{display:flex;align-items:flex-start;gap:8px;padding:7px 0;line-height:1.35}
+.q input{width:18px;height:18px;margin:2px 0 0;flex:0 0 auto;accent-color:var(--d)}
+.q label{cursor:pointer;flex:1;min-width:0}
+.pts{white-space:nowrap;font-size:.84rem;font-style:italic;color:var(--gc);margin-left:2px}
+.neg{color:var(--r)}
+.numrow{display:flex;align-items:center;gap:8px;padding:6px 0}
+.numrow label{flex:1;line-height:1.35}
+.numrow .pts{margin-left:0}
+.numrow select{width:62px;padding:7px 5px;font:inherit;border:1px solid var(--l);border-radius:4px;background:#fff}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.9rem}
+th,td{border-top:1px solid var(--l);padding:8px 6px;text-align:left;vertical-align:top}
+th{font-size:.76rem;color:var(--s);text-transform:uppercase;letter-spacing:.04em}
+footer{text-align:center;color:#857f68;font-size:.8rem;padding:20px 14px 30px}
+@media(max-width:520px){
+  .wrap{padding:18px 13px 45px}
+  .scoreinner{padding:8px 13px}
+  .score{font-size:1.65rem}
+  .status{font-size:.76rem}
+  fieldset{padding:17px 0}
+  legend{font-size:1.08rem}
+  .q{gap:7px;padding:6px 0;font-size:.95rem}
+  .q input{width:19px;height:19px}
+  .pts{font-size:.82rem}
+  .numrow{font-size:.94rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Betómetro</h1>
+
+</header>
+
+<div class="scorebar">
+<div class="scoreinner">
+<div class="score"><span id="score">0</span> <small>pontos</small></div>
+<div class="status"><strong id="tier">Tripeiro Raiz</strong><span id="tierText">A Foz é uma paragem distante do 500.</span></div>
+</div>
+</div>
+
+<main class="wrap">
+<div class="intro">
+<strong>Descobre o teu grau de betice da Foz.</strong>
+Assinala tudo o que se aplica. A pontuação é calculada automaticamente.
+</div>
+
+<div class="setting">
+<label><input id="polite" type="checkbox"> <span>Tornar o teste mais educado.</span></label>
+<span class="politebonus" id="politeBonus">+2 bónus</span>
+</div>
+
+<form id="quiz">
+
+<fieldset>
+<legend>Apelidos &amp; pedigree</legend>
+<div class="q"><input id="a1" type="checkbox" data-points="1"><label for="a1"><span class="qtext" data-informal="Tens um apelido composto por 2 nomes no fim" data-polite="Tem um apelido composto por 2 nomes no fim">Tens um apelido composto por 2 nomes no fim</span></label><span class="pts">+1</span></div>
+<div class="q"><input id="a2" type="checkbox" data-points="5"><label for="a2"><span class="qtext" data-informal="Ambos os teus apelidos finais são compostos por 2 nomes" data-polite="Ambos os apelidos finais são compostos por 2 nomes">Ambos os teus apelidos finais são compostos por 2 nomes</span></label><span class="pts">+5</span></div>
+<div class="q"><input id="a3" type="checkbox" data-points="10"><label for="a3"><span class="qtext" data-informal="Tens mais de 2 apelidos, todos compostos por 2 nomes" data-polite="Tem mais de 2 apelidos, todos compostos por 2 nomes">Tens mais de 2 apelidos, todos compostos por 2 nomes</span></label><span class="pts">+10</span></div>
+<div class="q"><input id="a4" type="checkbox" data-points="2"><label for="a4">Tem um “Y” no apelido familiar (d’Orey, Burnay, May, Croft, Symington…)</label><span class="pts">+2</span></div>
+<div class="q"><input id="a5" type="checkbox" data-points="1"><label for="a5">Tem mais de quatro apelidos no CC ou usa “de” / “e” entre eles</label><span class="pts">+1</span></div>
+<div class="q"><input id="a6" type="checkbox" data-points="3"><label for="a6">A família tem uma Quinta (no Douro, em Ponte de Lima ou no Minho)</label><span class="pts">+3</span></div>
+<div class="q"><input id="a7" type="checkbox" data-points="2"><label for="a7"><span class="qtext" data-informal="Dizes que a tua família é “anglo-portuguesa”" data-polite="Diz que a família é “anglo-portuguesa”">Dizes que a tua família é “anglo-portuguesa”</span></label><span class="pts">+2</span></div>
+<div class="q"><input id="a8" type="checkbox" data-points="2"><label for="a8">O nome próprio é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)</label><span class="pts">+2</span></div>
+<div class="q"><input id="a9" type="checkbox" data-points="2"><label for="a9">O nome dos filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)</label><span class="pts">+2</span></div>
+</fieldset>
+
+<fieldset>
+<legend>Desporto</legend>
+<div class="q"><input id="d1" type="checkbox" data-points="1"><label for="d1"><span class="qtext" data-informal="Jogas ténis ou rugby" data-polite="Joga ténis ou rugby">Jogas ténis ou rugby</span></label><span class="pts">+1</span></div>
+<div class="q"><input id="d2" type="checkbox" data-points="0"><label for="d2">Joga ténis <em>e</em> rugby — duplica os pontos de Desporto</label><span class="pts">×2</span></div>
+<div class="q"><input id="d3" type="checkbox" data-points="2"><label for="d3"><span class="qtext" data-informal="Os teus pais ou filhos também praticam" data-polite="Pais ou filhos também praticam">Os teus pais ou filhos também praticam</span></label><span class="pts">+2</span></div>
+<div class="q"><input id="club1" type="checkbox" data-points="3"><label for="club1"><span class="qtext" data-informal="És sócio do Lawn Tennis Club da Foz" data-polite="É sócio do Lawn Tennis Club da Foz">És sócio do Lawn Tennis Club da Foz</span></label><span class="pts">+3</span></div>
+<div class="q"><input id="club2" type="checkbox" data-points="3"><label for="club2">É sócio do Clube Inglês (Cricket)</label><span class="pts">+3</span></div>
+<div class="q"><input id="club3" type="checkbox" data-points="5"><label for="club3">É sócio do Clube Portuense</label><span class="pts">+5</span></div>
+<div class="q"><input id="club4" type="checkbox" data-points="2"><label for="club4">Joga padel na Quinta de Monserrate</label><span class="pts">+2</span></div>
+<div class="q"><input id="d5" type="checkbox" data-points="2"><label for="d5">Diz que faz surf em Matosinhos, independentemente de passar ou não o tempo sentado na prancha</label><span class="pts">+2</span></div>
+</fieldset>
+
+<fieldset>
+<legend>Família, educação &amp; tratamento</legend>
+<div class="q"><input id="f1" type="checkbox" data-points="1"><label for="f1"><span class="qtext" data-informal="Tratas os teus filhos por “você”" data-polite="Trata os filhos por “você”">Tratas os teus filhos por “você”</span></label><span class="pts">+1</span></div>
+<div class="q"><input id="f2" type="checkbox" data-points="3"><label for="f2"><span class="qtext" data-informal="Tratas os teus pais por “você”" data-polite="Trata os pais por “você”">Tratas os teus pais por “você”</span></label><span class="pts">+3</span></div>
+<div class="q"><input id="f3" type="checkbox" data-points="1"><label for="f3"><span class="qtext" data-informal="Andaste no Garcia, Francês, Torrinha ou Rosário" data-polite="Andou no Garcia, Francês, Torrinha ou Rosário">Andaste no Garcia, Francês, Torrinha ou Rosário</span></label><span class="pts">+1</span></div>
+<div class="q"><input id="f4" type="checkbox" data-points="3"><label for="f4"><span class="qtext" data-informal="Os teus pais ou filhos também andaram nessas escolas" data-polite="Pais ou filhos também andaram nessas escolas">Os teus pais ou filhos também andaram nessas escolas</span></label><span class="pts">+3</span></div>
+<div class="q"><input id="f5" type="checkbox" data-points="2"><label for="f5"><span class="qtext" data-informal="Fizeste o percurso Rosário / Alemão" data-polite="Fez o percurso Rosário / Alemão">Fizeste o percurso Rosário / Alemão</span></label><span class="pts">+2</span></div>
+<div class="q"><input id="f6" type="checkbox" data-points="2"><label for="f6"><span class="qtext" data-informal="Andaste no Garcia de Orta ou Clara de Resende" data-polite="Andou no Garcia de Orta ou Clara de Resende">Andaste no Garcia de Orta ou Clara de Resende</span></label><span class="pts">+2</span></div>
+<div class="q"><input id="f7" type="checkbox" data-points="2"><label for="f7"><span class="qtext" data-informal="Acabaste o secundário no Cebes" data-polite="Acabou o secundário no Cebes">Acabaste o secundário no Cebes</span></label><span class="pts">+2</span></div>
+<div class="q"><input id="f8" type="checkbox" data-points="-2"><label for="f8"><span class="qtext" data-informal="Estudaste o secundário fora do Grande Porto" data-polite="Estudou o secundário fora do Grande Porto">Estudaste o secundário fora do Grande Porto</span></label><span class="pts neg">−2</span></div>
+<div class="q"><input id="f9" type="checkbox" data-points="1"><label for="f9"><span class="qtext" data-informal="Fizeste Direito, Medicina ou equivalente" data-polite="Fez Direito, Medicina ou equivalente">Fizeste Direito, Medicina ou equivalente</span></label><span class="pts">+1</span></div>
+<div class="q"><input id="f10" type="checkbox" data-points="3"><label for="f10"><span class="qtext" data-informal="Os teus pais ou filhos fizeram Direito, Medicina ou equivalente" data-polite="Pais ou filhos fizeram Direito, Medicina ou equivalente">Os teus pais ou filhos fizeram Direito, Medicina ou equivalente</span></label><span class="pts">+3</span></div>
+</fieldset>
+
+<fieldset>
+<legend>Foz &amp; território</legend>
+<div class="q"><input id="z1" type="checkbox" data-points="1"><label for="z1"><span class="qtext" data-informal="Moras na Foz" data-polite="Mora na Foz">Moras na Foz</span></label><span class="pts">+1</span></div>
+<div class="q"><input id="z2" type="checkbox" data-points="3"><label for="z2"><span class="qtext" data-informal="Os teus pais também moram na Foz" data-polite="Os pais também moram na Foz">Os teus pais também moram na Foz</span></label><span class="pts">+3</span></div>
+<div class="q"><input id="z3" type="checkbox" data-points="5"><label for="z3"><span class="qtext" data-informal="Os teus avós também moram na Foz" data-polite="Os avós também moram na Foz">Os teus avós também moram na Foz</span></label><span class="pts">+5</span></div>
+<div class="numrow"><label for="zf">Gerações que, além de morar na Foz, também nasceram lá <span class="pts">+3 cada</span></label><select id="zf"><option>0</option><option>1</option><option>2</option><option>3</option></select></div>
+<div class="numrow"><label for="zp">Gerações nascidas fora do Porto <span class="pts neg">−1 cada</span></label><select id="zp"><option>0</option><option>1</option><option>2</option><option>3</option></select></div>
+<div class="q"><input id="z4" type="checkbox" data-points="2"><label for="z4">Mora no “triângulo dourado” — Foz Velha, Nevogilde ou Marechal Gomes da Costa</label><span class="pts">+2</span></div>
+<div class="q"><input id="z5" type="checkbox" data-points="2"><label for="z5">Mora em Aldoar mas usa “Foz do Douro” como localização no Instagram</label><span class="pts">+2</span></div>
+<div class="q"><input id="z6" type="checkbox" data-points="1"><label for="z6">Considera o Homem do Leme “demasiado povo” e prefere Molhe/Ingleses</label><span class="pts">+1</span></div>
+<div class="q"><input id="z7" type="checkbox" data-points="2"><label for="z7">Acha que cruzar a Ponte da Arrábida para ir a Gaia exige passaporte</label><span class="pts">+2</span></div>
+</fieldset>
+
+<fieldset>
+<legend>Fardamento, aparência &amp; acessórios</legend>
+<div class="q"><input id="p1" type="checkbox" data-points="1"><label for="p1"><span class="qtext" data-informal="Usas pulseira" data-polite="Usa pulseira">Usas pulseira</span></label><span class="pts">+1</span></div>
+<div class="q"><input id="p2" type="checkbox" data-points="3"><label for="p2"><span class="qtext" data-informal="Os teus pais ou filhos também usam pulseira" data-polite="Pais ou filhos também usam pulseira">Os teus pais ou filhos também usam pulseira</span></label><span class="pts">+3</span></div>
+<div class="q"><input id="p3" type="checkbox" data-points="1"><label for="p3"><span class="qtext" data-informal="Usas medalha religiosa" data-polite="Usa medalha religiosa">Usas medalha religiosa</span></label><span class="pts">+1</span></div>
+<div class="q"><input id="p4" type="checkbox" data-points="3"><label for="p4"><span class="qtext" data-informal="Usas medalha religiosa do Luiz Ferreira" data-polite="Usa medalha religiosa do Luiz Ferreira">Usas medalha religiosa do Luiz Ferreira</span></label><span class="pts">+3</span></div>
+<div class="q"><input id="p5" type="checkbox" data-points="3"><label for="p5">Às vezes ainda usa sapatos de vela (exceto em funerais)</label><span class="pts">+3</span></div>
+<div class="q"><input id="p6" type="checkbox" data-points="2"><label for="p6">Usa colete Patagonia / Scalpers / Gant sobre camisa de linho</label><span class="pts">+2</span></div>
+<div class="q"><input id="p6b" type="checkbox" data-points="1"><label for="p6b">Usa gel no cabelo, mas para puxar tudo para trás</label><span class="pts">+1</span></div>
+<div class="q"><input id="p7" type="checkbox" data-points="2"><label for="p7"><span class="qtext" data-informal="Tens um casaco Barbour encerado" data-polite="Tem um casaco Barbour encerado">Tens um casaco Barbour encerado</span></label><span class="pts">+2</span></div>
+<div class="q"><input id="p8" type="checkbox" data-points="2"><label for="p8">Tem Defender antigo, Mini clássico ou Fiat 500 oferecido aos 18</label><span class="pts">+2</span></div>
+<div class="q"><input id="p9" type="checkbox" data-points="-1"><label for="p9"><span class="qtext" data-informal="Usas brinco" data-polite="Usa brinco">Usas brinco</span></label><span class="pts neg">−1</span></div>
+<div class="q"><input id="p10" type="checkbox" data-points="-1"><label for="p10">Só para homens: pintou o cabelo integralmente</label><span class="pts neg">−1</span></div>
+<div class="q"><input id="p11" type="checkbox" data-points="-5"><label for="p11"><span class="qtext" data-informal="Tens tatuagem com palavras em Português" data-polite="Tem tatuagem com palavras em Português">Tens tatuagem com palavras em Português</span></label><span class="pts neg">−5</span></div>
+<div class="q"><input id="p12" type="checkbox" data-points="3"><label for="p12">Tem tatuagem com figuras geométricas, linhas, losangos, etc.</label><span class="pts">+3</span></div>
+</fieldset>
+
+<fieldset>
+<legend>Férias, vida social &amp; casa</legend>
+<div class="q"><input id="v0" type="checkbox" data-points="3"><label for="v0">Usa fato no Natal em casa dos pais ou dos avós</label><span class="pts">+3</span></div>
+<div class="q"><input id="v1" type="checkbox" data-points="2"><label for="v1">Algarve nas primeiras 2 semanas de agosto e Moledo nas últimas 2, por esta ordem</label><span class="pts">+2</span></div>
+<div class="q"><input id="v2" type="checkbox" data-points="-2"><label for="v2">O mesmo padrão, mas pela ordem trocada</label><span class="pts neg">−2</span></div>
+<div class="q"><input id="v3" type="checkbox" data-points="2"><label for="v3">Foi aos campos de férias do Camtil, Campos do Foco, Campos de Cristo Rei ou outros campos de férias religiosos</label><span class="pts">+2</span></div>
+<div class="q"><input id="v4" type="checkbox" data-points="5"><label for="v4">Foi monitor(a) nos campos de férias do Camtil, Campos do Foco, Campos de Cristo Rei ou outros campos de férias religiosos</label><span class="pts">+5</span></div>
+<div class="q"><input id="v5" type="checkbox" data-points="2"><label for="v5">Andou no CREU</label><span class="pts">+2</span></div>
+<div class="q"><input id="v6" type="checkbox" data-points="1"><label for="v6">Tem empregada que vai buscar os filhos à escola</label><span class="pts">+1</span></div>
+<div class="q"><input id="v7" type="checkbox" data-points="2"><label for="v7">Os pais ainda têm a Enciclopédia Luso-Brasileira da Cultura na estante de casa</label><span class="pts">+2</span></div>
+<div class="q"><input id="v8" type="checkbox" data-points="1"><label for="v8">Encontra conhecidos no Tavi ou Bonaparte e acaba a falar de heranças ou barcos</label><span class="pts">+1</span></div>
+</fieldset>
+
+<fieldset>
+<legend>Bridge</legend>
+<div class="q"><input id="b1" type="checkbox" data-points="15"><label for="b1">Joga bridge</label><span class="pts">+15</span></div>
+<div class="q"><input id="b2" type="checkbox" data-points="-1"><label for="b2">Não sabe o que é bridge</label><span class="pts neg">−1</span></div>
+<div class="q"><input id="b3" type="checkbox" data-points="20"><label for="b3">Os pais jogam bridge</label><span class="pts">+20</span></div>
+</fieldset>
+
+<fieldset>
+<legend>Vocabulário, religião &amp; família</legend>
+<div class="q"><input id="x1" type="checkbox" data-points="2"><label for="x1">Diz “maninho”, “juro meu”, “top”, “chunga” ou “brutal” com sotaque arrastado</label><span class="pts">+2</span></div>
+<div class="q"><input id="x2" type="checkbox" data-points="3"><label for="x2">Família ligada ao Opus Dei ou Schoenstatt, mas arma-se em dissidente</label><span class="pts">+3</span></div>
+<div class="q"><input id="x3" type="checkbox" data-points="1"><label for="x3">Foi à missa em São João da Foz para ver quem estava à saída</label><span class="pts">+1</span></div>
+<div class="q"><input id="x4" type="checkbox" data-points="1"><label for="x4">Tem primos lisboetas</label><span class="pts">+1</span></div>
+<div class="q"><input id="x5" type="checkbox" data-points="3"><label for="x5">Tem irmã que fez missões em países africanos</label><span class="pts">+3</span></div>
+<div class="q"><input id="x6" type="checkbox" data-points="1"><label for="x6">É amigo do João Inácio</label><span class="pts">+1</span></div>
+<div class="q"><input id="x7" type="checkbox" data-points="3"><label for="x7">Diz que o Porto está descaracterizado pelo turismo, mas o pai tem ALs</label><span class="pts">+3</span></div>
+<div class="q"><input id="x8" type="checkbox" data-points="0"><label for="x8"><span class="qtext" data-informal="És muito rico ou tens pais muito ricos" data-polite="É muito rico ou tem pais muito ricos">És muito rico ou tens pais muito ricos</span></label><span class="pts">+0</span></div>
+<div class="q"><input id="x9" type="checkbox" data-points="-2"><label for="x9"><span class="qtext" data-informal="És pobre ou tens pais pobres" data-polite="É pobre ou tem pais pobres">És pobre ou tens pais pobres</span></label><span class="pts neg">−2</span></div>
+<div class="q"><input id="x10" type="checkbox" data-points="1"><label for="x10"><span class="qtext" data-informal="És da classe média que pode jantar fora quando quer" data-polite="É da classe média que pode jantar fora quando quer">És da classe média que pode jantar fora quando quer</span></label><span class="pts">+1</span></div>
+<div class="q"><input id="x11" type="checkbox" data-points="3"><label for="x11">Herdaste um negócio, escritório ou consultório onde está o nome da tua família</label><span class="pts">+3</span></div>
+</fieldset>
+
+<fieldset>
+<legend>Penalizações especiais</legend>
+<div class="q"><input id="n1" type="checkbox" data-points="-5"><label for="n1">Adicionou o nome da mulher ao seu quando casou</label><span class="pts neg">−5</span></div>
+<div class="q"><input id="n2" type="checkbox" data-points="-5"><label for="n2">Tem um pai padre</label><span class="pts neg">−5</span></div>
+</fieldset>
+
+<div class="note">
+<strong>Classificação</strong>
+<table>
+<thead><tr><th>Pontos</th><th>Diagnóstico</th></tr></thead>
+<tbody>
+<tr><td>≤ 9</td><td><strong>Tripeiro Raiz</strong> — A Foz é uma paragem distante do 500.</td></tr>
+<tr><td>10–19</td><td><strong>Beto da Boavista</strong> — Tendências burguesas, ainda com noção do preço de um fino.</td></tr>
+<tr><td>20–29</td><td><strong>Beto Certificado da Foz</strong> — Colete impecável e fins de semana em Moledo.</td></tr>
+<tr><td>30+</td><td><strong>Lorde Feudal de Nevogilde</strong> — A quinta tem capela própria.</td></tr>
+</tbody>
+</table>
+</div>
+</form>
+</main>
+
+<footer>Betómetro — puramente satírico, sem validade científica alguma.</footer>
+
+<script>
+const form=document.getElementById('quiz');
+const scoreEl=document.getElementById('score');
+const tierEl=document.getElementById('tier');
+const textEl=document.getElementById('tierText');
+
+const tiers=[
+{max:9,name:'Tripeiro Raiz',text:'A Foz é uma paragem distante do 500.'},
+{max:19,name:'Beto da Boavista',text:'Tendências burguesas, ainda com noção do preço de um fino.'},
+{max:29,name:'Beto Certificado da Foz',text:'Colete impecável e fins de semana em Moledo.'},
+{max:Infinity,name:'Lorde Feudal de Nevogilde',text:'A quinta tem capela própria.'}
+];
+
+const polite=document.getElementById('polite');
+const politeBonus=document.getElementById('politeBonus');
+
+function updateLanguage(){
+  document.querySelectorAll('.qtext').forEach(el=>{
+    el.innerHTML=polite.checked?el.dataset.polite:el.dataset.informal;
+  });
+  document.querySelector('.setting').classList.toggle('checked',polite.checked);
+  calculate();
+}
+polite.addEventListener('change',updateLanguage);
+
+function calculate(){
+  let score=0;
+  if(polite.checked) score+=2;
+  form.querySelectorAll('input[type=checkbox][data-points]').forEach(i=>{
+    if(i.checked) score+=Number(i.dataset.points);
+  });
+
+  // Ténis + rugby duplica todos os pontos da secção de Desporto.
+  if(document.getElementById('d2').checked){
+    score += 1 + (document.getElementById('d3').checked ? 2 : 0) +
+             (document.getElementById('d5').checked ? 2 : 0);
+  }
+
+  score += Number(document.getElementById('zf').value)*3;
+  score -= Number(document.getElementById('zp').value);
+
+  const tier=tiers.find(t=>score<=t.max);
+  scoreEl.textContent=score;
+  tierEl.textContent=tier.name;
+  textEl.textContent=tier.text;
+}
+form.addEventListener('input',calculate);
+calculate();
+</script>
+</body>
+</html>
