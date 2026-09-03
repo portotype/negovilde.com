@@ -241,23 +241,26 @@ polite.addEventListener('change',updateLanguage);
 const shareBtn=document.getElementById('share');
 const shareMsg=document.getElementById('shareMsg');
 
-async function shareResult(){
-  const points=document.getElementById('score').textContent;
+async function shareResult() {
+  calculate();
+  const points = document.getElementById('score').textContent.trim();
+  const classification = document.getElementById('classification').textContent.trim();
+  const description = document.getElementById('description').textContent.trim();
+
   const text = `${points} pontos: ${classification}
 - ${description}
 Teste em https://nevogilde.com/files/betometro.html`;
-  try{
-    if(navigator.share){
-      await navigator.share({text});
-      shareMsg.textContent='Partilhado.';
-    }else if(navigator.clipboard){
-      await navigator.clipboard.writeText(text);
-      shareMsg.textContent='Texto copiado.';
-    }else{
-      window.prompt('Copia este texto:',text);
-    }
-  }catch(e){
-    if(e.name!=='AbortError') shareMsg.textContent='Não foi possível partilhar.';
+
+  if (navigator.share) {
+    navigator.share({ text }).catch(() => {});
+  } else if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Resultado copiado.');
+    }).catch(() => {
+      window.prompt('Copia o resultado:', text);
+    });
+  } else {
+    window.prompt('Copia o resultado:', text);
   }
 }
 shareBtn.addEventListener('click',shareResult);
