@@ -243,7 +243,9 @@ const shareMsg=document.getElementById('shareMsg');
 
 async function shareResult(){
   const points=document.getElementById('score').textContent;
-  const text=`${points}_classification na escala de Beto da Foz, em https://nevogilde.com/files/betometro.html`;
+  const text = `${points} pontos: ${classification}
+- ${description}
+Teste em https://nevogilde.com/files/betometro.html`;
   try{
     if(navigator.share){
       await navigator.share({text});
