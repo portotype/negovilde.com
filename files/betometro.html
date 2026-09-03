@@ -18,6 +18,10 @@ header p{margin:0;color:var(--dl);font-style:italic;font-size:.98rem}
 .score small{font-size:.72rem;font-weight:normal;color:var(--s)}
 .status{font-size:.82rem;text-align:right;color:var(--s);line-height:1.2}
 .status strong{display:block;color:var(--g);font-size:.95rem}
+.sharebar{display:contents}
+#share{border:1px solid var(--g);background:var(--g);color:var(--c);border-radius:4px;padding:5px 9px;font:inherit;font-size:.78rem;cursor:pointer;white-space:nowrap}
+#share:active{transform:translateY(1px)}
+#shareMsg{font-size:.8rem;color:var(--s)}
 .wrap{max-width:760px;margin:auto;padding:24px 16px 60px}
 .intro,.note{background:var(--ca);border-left:4px solid var(--d);padding:12px 14px;margin-bottom:22px;color:#55503f;font-size:.92rem}
 .intro strong,.note strong{display:block;color:var(--g);margin-bottom:2px}
@@ -64,8 +68,11 @@ footer{text-align:center;color:#857f68;font-size:.8rem;padding:20px 14px 30px}
 <div class="scoreinner">
 <div class="score"><span id="score">0</span> <small>pontos</small></div>
 <div class="status"><strong id="tier">Tripeiro Raiz</strong><span id="tierText">A Foz é uma paragem distante do 500.</span></div>
+<button type="button" id="share">Partilhar</button>
 </div>
 </div>
+
+<span id="shareMsg" aria-live="polite"></span>
 
 <main class="wrap">
 <div class="intro">
@@ -180,10 +187,12 @@ Assinala tudo o que se aplica. A pontuação é calculada automaticamente.
 </fieldset>
 
 <fieldset>
-<legend>Questões especiais</legend>
+<legend>Casamento</legend>
 <div class="q"><input id="n1" type="checkbox" data-points="-5"><label for="n1"><span class="qtext" data-informal="Adicionaste o nome da tua mulher ao teu quando casaste" data-polite="Adicionou o nome da mulher ao seu quando casou">Adicionaste o nome da tua mulher ao teu quando casaste</span></label><span class="pts neg">−5</span></div>
-<div class="q"><input id="n2" type="checkbox" data-points="-5"><label for="n2"><span class="qtext" data-informal="Tens um pai padre" data-polite="Tem um pai padre">Tens um pai padre</span></label><span class="pts neg">−5</span></div>
-<div class="q"><input id="n3" type="checkbox" data-points="-5"><label for="n3"><span class="qtext" data-informal="Tens uma tatuagem nas costas ou no peito com mais de 10×10 cm" data-polite="Tem uma tatuagem nas costas ou no peito com mais de 10×10 cm">Tens uma tatuagem nas costas ou no peito com mais de 10×10 cm</span></label><span class="pts neg">−5</span></div>
+</fieldset>
+
+<fieldset>
+<legend>Questões especiais</legend>
 <div class="q special-setting"><input id="polite" type="checkbox"><label for="polite">Tornar o teste mais educado.</label><span class="pts" id="politeBonus">+2</span></div>
 </fieldset>
 
@@ -228,6 +237,28 @@ function updateLanguage(){
   calculate();
 }
 polite.addEventListener('change',updateLanguage);
+
+const shareBtn=document.getElementById('share');
+const shareMsg=document.getElementById('shareMsg');
+
+async function shareResult(){
+  const points=document.getElementById('score').textContent;
+  const text=`${points}_classification na escala de Beto da Foz, em https://nevogilde.com/files/betometro.html`;
+  try{
+    if(navigator.share){
+      await navigator.share({text});
+      shareMsg.textContent='Partilhado.';
+    }else if(navigator.clipboard){
+      await navigator.clipboard.writeText(text);
+      shareMsg.textContent='Texto copiado.';
+    }else{
+      window.prompt('Copia este texto:',text);
+    }
+  }catch(e){
+    if(e.name!=='AbortError') shareMsg.textContent='Não foi possível partilhar.';
+  }
+}
+shareBtn.addEventListener('click',shareResult);
 
 function calculate(){
   let score=0;
