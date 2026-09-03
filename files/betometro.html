@@ -68,7 +68,7 @@ footer{text-align:center;color:#857f68;font-size:.8rem;padding:20px 14px 30px}
 <div class="scoreinner">
 <div class="score"><span id="score">0</span> <small>pontos</small></div>
 <div class="status"><strong id="tier">Tripeiro Raiz</strong><span id="tierText">A Foz é uma paragem distante do 500.</span></div>
-<button type="button" id="share">Partilhar</button>
+<button type="button" id="share" id="shareBtn">Partilhar</button>
 </div>
 </div>
 
@@ -92,12 +92,8 @@ Assinala tudo o que se aplica. A pontuação é calculada automaticamente.
 <div class="q"><input id="a6" type="checkbox" data-points="3"><label for="a6"><span class="qtext" data-informal="A tua família tem uma Quinta (no Douro, em Ponte de Lima ou no Minho)" data-polite="A família tem uma Quinta (no Douro, em Ponte de Lima ou no Minho)">A tua família tem uma Quinta (no Douro, em Ponte de Lima ou no Minho)</span></label><span class="pts">+3</span></div>
 <div class="q"><input id="a7" type="checkbox" data-points="2"><label for="a7"><span class="qtext" data-informal="Dizes que a tua família é “anglo-portuguesa”" data-polite="Diz que a família é “anglo-portuguesa”">Dizes que a tua família é “anglo-portuguesa”</span></label><span class="pts">+2</span></div>
 <div class="q"><input id="a8" type="checkbox" data-points="2"><label for="a8"><span class="qtext" data-informal="O teu nome próprio é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)" data-polite="O nome próprio é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)">O teu nome próprio é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)</span></label><span class="pts">+2</span></div>
-<div class="q"><input id="a9" type="checkbox" data-points="2"><label for="a9"><span class="qtext" data-informal="O nome dos teus filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)" data-polite="O nome dos filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)">O nome dos teus filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)</span></label>
-<label>
-  <span class="qtext">Tens na tua família direta descendente dos teus avós uma Bibi, Cachucha, Concha, Cuca, Gigi, Guga, Guti, Juju, Lalá, Lili, Luti, Micas, Mimi, Nini, Pipa, Piti, Piki, Xinha, ou um Gongas, Pipas, Pipo, Tato, Tito, Tozé, Vasco/Vasquinho, Santi, Salu, Zeca, Guga, Bugas.</span>
-  <span class="points">+2</span>
-  <input type="checkbox" data-points="2">
-</label><span class="pts">+2</span></div>
+<div class="q"><input id="a9" type="checkbox" data-points="2"><label for="a9"><span class="qtext" data-informal="O nome dos teus filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)" data-polite="O nome dos filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)">O nome dos teus filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)</span></label><span class="pts">+2</span></div>
+<div class="q"><input id="a10" type="checkbox" data-points="2"><label for="a10"><span class="qtext" data-informal="Tens na tua família direta descendente dos teus avós uma Bibi, Cachucha, Concha, Cuca, Gigi, Guga, Guti, Juju, Lalá, Lili, Luti, Micas, Mimi, Nini, Pipa, Piti, Piki, Xinha, ou um Gongas, Pipas, Pipo, Tato, Tito, Tozé, Vasco/Vasquinho, Santi, Salu, Zeca, Guga, Bugas." data-polite="Tem na família direta descendente dos avós uma Bibi, Cachucha, Concha, Cuca, Gigi, Guga, Guti, Juju, Lalá, Lili, Luti, Micas, Mimi, Nini, Pipa, Piti, Piki, Xinha, ou um Gongas, Pipas, Pipo, Tato, Tito, Tozé, Vasco/Vasquinho, Santi, Salu, Zeca, Guga, Bugas.">Tens na tua família direta descendente dos teus avós uma Bibi, Cachucha, Concha, Cuca, Gigi, Guga, Guti, Juju, Lalá, Lili, Luti, Micas, Mimi, Nini, Pipa, Piti, Piki, Xinha, ou um Gongas, Pipas, Pipo, Tato, Tito, Tozé, Vasco/Vasquinho, Santi, Salu, Zeca, Guga, Bugas.</span></label><span class="pts">+2</span></div>
 </fieldset>
 
 <fieldset>
@@ -246,8 +242,9 @@ polite.addEventListener('change',updateLanguage);
 const shareBtn=document.getElementById('share');
 const shareMsg=document.getElementById('shareMsg');
 
-async function shareResult() {
+async async function shareResult() {
   calculate();
+
   const points = document.getElementById('score').textContent.trim();
   const classification = document.getElementById('classification').textContent.trim();
   const description = document.getElementById('description').textContent.trim();
@@ -256,15 +253,44 @@ async function shareResult() {
 - ${description}
 Teste em https://nevogilde.com/files/betometro.html`;
 
+  // On iOS/iPadOS Safari, use the native share sheet.
   if (navigator.share) {
-    navigator.share({ text }).catch(() => {});
-  } else if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Resultado copiado.');
-    }).catch(() => {
-      window.prompt('Copia o resultado:', text);
-    });
-  } else {
+    try {
+      await navigator.share({
+        title: 'Betómetro',
+        text: text
+      });
+      return;
+    } catch (err) {
+      // User cancelled the share sheet: do nothing.
+      if (err && err.name === 'AbortError') return;
+    }
+  }
+
+  // Fallback: copy the result.
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+
+    // Simple-copy fallback should say exactly "Copied".
+    const button = document.getElementById('shareBtn');
+    if (button) {
+      const original = button.textContent;
+      button.textContent = 'Copied';
+      setTimeout(() => { button.textContent = original; }, 1500);
+    }
+  } catch (err) {
     window.prompt('Copia o resultado:', text);
   }
 }
