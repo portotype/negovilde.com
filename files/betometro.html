@@ -92,7 +92,12 @@ Assinala tudo o que se aplica. A pontuação é calculada automaticamente.
 <div class="q"><input id="a6" type="checkbox" data-points="3"><label for="a6"><span class="qtext" data-informal="A tua família tem uma Quinta (no Douro, em Ponte de Lima ou no Minho)" data-polite="A família tem uma Quinta (no Douro, em Ponte de Lima ou no Minho)">A tua família tem uma Quinta (no Douro, em Ponte de Lima ou no Minho)</span></label><span class="pts">+3</span></div>
 <div class="q"><input id="a7" type="checkbox" data-points="2"><label for="a7"><span class="qtext" data-informal="Dizes que a tua família é “anglo-portuguesa”" data-polite="Diz que a família é “anglo-portuguesa”">Dizes que a tua família é “anglo-portuguesa”</span></label><span class="pts">+2</span></div>
 <div class="q"><input id="a8" type="checkbox" data-points="2"><label for="a8"><span class="qtext" data-informal="O teu nome próprio é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)" data-polite="O nome próprio é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)">O teu nome próprio é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)</span></label><span class="pts">+2</span></div>
-<div class="q"><input id="a9" type="checkbox" data-points="2"><label for="a9"><span class="qtext" data-informal="O nome dos teus filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)" data-polite="O nome dos filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)">O nome dos teus filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)</span></label><span class="pts">+2</span></div>
+<div class="q"><input id="a9" type="checkbox" data-points="2"><label for="a9"><span class="qtext" data-informal="O nome dos teus filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)" data-polite="O nome dos filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)">O nome dos teus filhos é um clássico atemporal da Foz (Vasco, Salvador, Lourenço, Carminho, Caetana, Mercedes)</span></label>
+<label>
+  <span class="qtext">Tens na tua família direta descendente dos teus avós uma Bibi, Cachucha, Concha, Cuca, Gigi, Guga, Guti, Juju, Lalá, Lili, Luti, Micas, Mimi, Nini, Pipa, Piti, Piki, Xinha, ou um Gongas, Pipas, Pipo, Tato, Tito, Tozé, Vasco/Vasquinho, Santi, Salu, Zeca, Guga, Bugas.</span>
+  <span class="points">+2</span>
+  <input type="checkbox" data-points="2">
+</label><span class="pts">+2</span></div>
 </fieldset>
 
 <fieldset>
@@ -201,10 +206,10 @@ Assinala tudo o que se aplica. A pontuação é calculada automaticamente.
 <table>
 <thead><tr><th>Pontos</th><th>Diagnóstico</th></tr></thead>
 <tbody>
-<tr><td>≤ 9</td><td><strong>Tripeiro Raiz</strong> — A Foz é uma paragem distante do 500.</td></tr>
-<tr><td>10–19</td><td><strong>Beto da Boavista</strong> — Tendências burguesas, ainda com noção do preço de um fino.</td></tr>
-<tr><td>20–29</td><td><strong>Beto Certificado da Foz</strong> — Colete impecável e fins de semana em Moledo.</td></tr>
-<tr><td>30+</td><td><strong>Lorde Feudal de Nevogilde</strong> — A quinta tem capela própria.</td></tr>
+<tr><td>≤ 15</td><td><strong>Tripeiro Raiz</strong> — A Foz é uma paragem distante do 500.</td></tr>
+<tr><td>16–25</td><td><strong>Beto da Boavista</strong> — Tendências burguesas, ainda com noção do preço de um fino.</td></tr>
+<tr><td>26–35</td><td><strong>Beto Certificado da Foz</strong> — Colete impecável e fins de semana em Moledo.</td></tr>
+<tr><td>36+</td><td><strong>Lorde Feudal de Nevogilde</strong> — A quinta tem capela própria.</td></tr>
 </tbody>
 </table>
 </div>
@@ -220,9 +225,9 @@ const tierEl=document.getElementById('tier');
 const textEl=document.getElementById('tierText');
 
 const tiers=[
-{max:9,name:'Tripeiro Raiz',text:'A Foz é uma paragem distante do 500.'},
-{max:19,name:'Beto da Boavista',text:'Tendências burguesas, ainda com noção do preço de um fino.'},
-{max:29,name:'Beto Certificado da Foz',text:'Colete impecável e fins de semana em Moledo.'},
+{max:15,name:'Tripeiro Raiz',text:'A Foz é uma paragem distante do 500.'},
+{max:25,name:'Beto da Boavista',text:'Tendências burguesas, ainda com noção do preço de um fino.'},
+{max:35,name:'Beto Certificado da Foz',text:'Colete impecável e fins de semana em Moledo.'},
 {max:Infinity,name:'Lorde Feudal de Nevogilde',text:'A quinta tem capela própria.'}
 ];
 
