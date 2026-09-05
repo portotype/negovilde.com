@@ -20,8 +20,8 @@ header p{margin:0;color:var(--dl);font-style:italic;font-size:.98rem}
 .status{font-size:.82rem;text-align:right;color:var(--s);line-height:1.2}
 .status strong{display:block;color:var(--g);font-size:.95rem}
 .sharebar{display:contents}
-#share{border:1px solid var(--g);background:var(--g);color:var(--c);border-radius:4px;padding:5px 9px;font:inherit;font-size:.78rem;cursor:pointer;white-space:nowrap}
-#share:active{transform:translateY(1px)}
+#shareBtn{border:1px solid var(--g);background:var(--g);color:var(--c);border-radius:4px;padding:5px 9px;font:inherit;font-size:.78rem;cursor:pointer;white-space:nowrap}
+#shareBtn:active{transform:translateY(1px)}
 #shareMsg{font-size:.8rem;color:var(--s)}
 .wrap{max-width:760px;margin:auto;padding:24px 16px 60px}
 .intro,.note{background:var(--ca);border-left:4px solid var(--d);padding:12px 14px;margin-bottom:22px;color:#55503f;font-size:.92rem}
@@ -158,10 +158,10 @@ Assinala tudo o que se aplica. A pontuação é calculada automaticamente.
 <table>
 <thead><tr><th>Pontos</th><th>Diagnóstico</th></tr></thead>
 <tbody>
-<tr><td>≤ 15</td><td><strong>Tripeiro Raiz</strong> — A Foz é uma paragem distante do 500.</td></tr>
-<tr><td>16–25</td><td>Beto da Boavista — Com tendências burguesas, mas queres viver ao lado de um Pingo Doce dos grandes.</td></tr>
-<tr><td>26–35</td><td><strong>Beto Certificado da Foz</strong> — Colete impecável e fins de semana em Moledo.</td></tr>
-<tr><td>36+</td><td>Lorde Feudal de Nevogilde — "Foz" já é um conceito muito abrangente..</td></tr>
+<tr><td>≤ 15</td><td><strong>Tripeiro de Gema</strong> — Há quanto tempo não assaltas um beto?</td></tr>
+<tr><td>16–25</td><td><strong>Beto da Boavista</strong> — Com tendências burguesas, mas queres viver ao lado de um Pingo Doce dos grandes.</td></tr>
+<tr><td>26–35</td><td><strong>Beto da Foz certificado</strong> — Bola preta na ralé!</td></tr>
+<tr><td>36+</td><td><strong>Lorde Feudal de Nevogilde</strong> — "Foz" já é um conceito muito abrangente..</td></tr>
 </tbody>
 </table>
 </div>
@@ -175,10 +175,10 @@ const tierEl=document.getElementById('tier');
 const textEl=document.getElementById('tierText');
 
 const tiers=[
-{max:15,name:'Tripeiro Raiz',text:'A Foz é uma paragem distante do 500.'},
-{max:25,name:'Beto da Boavista',text:'Com tendências burguesas, mas queres viver ao lado de um Pingo Doce dos grandes.'},
-{max:35,name:'Beto Certificado da Foz',text:'Colete impecável e fins de semana em Moledo.'},
-{max:Infinity,name:'Lorde Feudal de Nevogilde',text:'"Foz" já é um conceito muito abrangente..'}
+  {max:15,name:'Tripeiro de Gema',text:'Há quanto tempo não assaltas um beto?'},
+  {max:25,name:'Beto da Boavista',text:'Com tendências burguesas, mas queres viver ao lado de um Pingo Doce dos grandes.'},
+  {max:35,name:'Beto da Foz certificado',text:'Bola preta na ralé!'},
+  {max:Infinity,name:'Lorde Feudal de Nevogilde',text:'"Foz" já é um conceito muito abrangente..'}
 ];
 
 const polite=document.getElementById('polite');
@@ -186,81 +186,87 @@ const politeBonus=document.getElementById('politeBonus');
 
 function updateLanguage(){
   document.querySelectorAll('.qtext').forEach(el=>{
-    el.innerHTML=polite.checked?el.dataset.polite:el.dataset.informal;
+    el.innerHTML=polite.checked ? el.dataset.polite : el.dataset.informal;
   });
   document.querySelector('.special-setting').classList.toggle('checked',polite.checked);
   calculate();
 }
-polite.addEventListener('change',updateLanguage);
 
-const shareBtn=document.getElementById('share');
-const shareMsg=document.getElementById('shareMsg');
+if(polite) polite.addEventListener('change',updateLanguage);
 
-async function shareResult() {
+const shareBtn=document.getElementById('shareBtn');
+
+async function shareResult(){
   calculate();
-  const points = document.getElementById('score').textContent.trim();
-  const classification = document.getElementById('tier').textContent.trim();
-  const description = document.getElementById('tierText').textContent.trim();
-  const text = `${points} pontos: ${classification}
+
+  const points=scoreEl.textContent.trim();
+  const classification=tierEl.textContent.trim();
+  const description=textEl.textContent.trim();
+  const text=`${points} pontos: ${classification}
 - ${description}
 Teste em https://nevogilde.com/files/betometro.html`;
 
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: 'Betómetro', text });
+  if(navigator.share){
+    try{
+      await navigator.share({title:'Betómetro',text});
       return;
-    } catch (err) {
-      if (err && err.name === 'AbortError') return;
+    }catch(err){
+      if(err && err.name==='AbortError') return;
     }
   }
 
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
+  try{
+    if(navigator.clipboard && window.isSecureContext){
       await navigator.clipboard.writeText(text);
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.setAttribute('readonly', '');
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
+    }else{
+      const ta=document.createElement('textarea');
+      ta.value=text;
+      ta.setAttribute('readonly','');
+      ta.style.position='fixed';
+      ta.style.left='-9999px';
       document.body.appendChild(ta);
       ta.select();
       document.execCommand('copy');
       ta.remove();
     }
-    const button = document.getElementById('shareBtn');
-    if (button) {
-      const original = button.textContent;
-      button.textContent = 'Copied';
-      setTimeout(() => { button.textContent = original; }, 1500);
+
+    if(shareBtn){
+      const original=shareBtn.textContent;
+      shareBtn.textContent='Copiado';
+      setTimeout(()=>{shareBtn.textContent=original;},1500);
     }
-  } catch (err) {
-    window.prompt('Copia o resultado:', text);
+  }catch(err){
+    window.prompt('Copia o resultado:',text);
   }
 }
-shareBtn.addEventListener('click',shareResult);
+
+if(shareBtn) shareBtn.addEventListener('click',shareResult);
 
 function calculate(){
   let score=0;
-  if(polite.checked) score+=2;
-  form.querySelectorAll('input[type=checkbox][data-points]').forEach(i=>{
+
+  if(polite && polite.checked) score+=2;
+
+  form.querySelectorAll('input[type="checkbox"][data-points]').forEach(i=>{
     if(i.checked) score+=Number(i.dataset.points);
   });
 
-  // Ténis + rugby duplica todos os pontos da secção de Desporto.
-  if(document.getElementById('d2').checked){
-    score += 1 + (document.getElementById('d3').checked ? 2 : 0) +
-             (document.getElementById('d5').checked ? 2 : 0);
+  // Ténis + rugby duplica os pontos de Desporto.
+  // d2 itself has 0 points; when checked, add another copy of d1+d3+d5.
+  const d2=document.getElementById('d2');
+  if(d2 && d2.checked){
+    ['d1','d3','d5'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el && el.checked) score+=Number(el.dataset.points || 0);
+    });
   }
-
-  score += Number(document.getElementById('zf').value)*3;
-  score -= Number(document.getElementById('zp').value);
 
   const tier=tiers.find(t=>score<=t.max);
   scoreEl.textContent=score;
   tierEl.textContent=tier.name;
   textEl.textContent=tier.text;
 }
+
 form.addEventListener('input',calculate);
 calculate();
 </script>
